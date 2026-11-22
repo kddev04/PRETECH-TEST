@@ -651,67 +651,32 @@
   edgeTop.position.set(0.63, 2.05, 0.05);
   panel.add(edgeTop);
 
-  // data rising from the gateway (IIoT uplink)
-  const DATA_N = 26;
-  const dataPos = new Float32Array(DATA_N * 3);
-  const dataCol = new Float32Array(DATA_N * 3);
-  const dataSeed = Array.from({ length: DATA_N }, (_, i) => i / DATA_N);
-  const dataGeo = new THREE.BufferGeometry();
-  dataGeo.setAttribute("position", new THREE.BufferAttribute(dataPos, 3));
-  dataGeo.setAttribute("color", new THREE.BufferAttribute(dataCol, 3));
-  const dataPts = new THREE.Points(dataGeo, new THREE.PointsMaterial({
-    size: 0.045, vertexColors: true, transparent: true, depthWrite: false,
-    blending: THREE.AdditiveBlending, toneMapped: false,
-  }));
-  dataPts.frustumCulled = false;
-  scene.add(dataPts);
-  const edgeWorld = new THREE.Vector3();
-  const orange = new THREE.Color(0xff9a3c);
 
   /* ---------- camera ---------- */
   const camera = new THREE.PerspectiveCamera(30, 1, 0.1, 80);
-  const lookAt = new THREE.Vector3(0.55, 1.0, -0.2);
-  const view = { az: -0.4, el: 0.28, radius: 12.6, shift: 0 };
-  const pointer = { x: 0, y: 0, tx: 0, ty: 0 };
+  const lookAt = new THREE.Vector3(0.4, 1.0, -0.3);
+  const view = { az: -0.42, el: 0.3, radius: 11 };
 
   const resize = () => {
     const w = canvas.clientWidth, h = canvas.clientHeight;
     if (!w || !h) return;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
-    const wide = !small.matches;
-    // on wide screens slide the cell into the right part of the frame, leaving calm space for the headline
-    view.shift = wide ? w * 0.21 : 0;
-    view.radius = wide ? 12.6 : 12.6 * THREE.MathUtils.clamp(0.95 / camera.aspect, 0.85, 1.3);
-    view.el = wide ? 0.28 : 0.3;
-    lookAt.set(wide ? 0.55 : 1.0, wide ? 1.0 : 1.15, wide ? -0.2 : -0.4);
-    if (view.shift) camera.setViewOffset(w, h, -view.shift, 0, w, h);
-    else camera.clearViewOffset();
+    // the window is wide on desktop, nearly square on phones: back off as it narrows
+    view.radius = 9.2 * THREE.MathUtils.clamp(1.7 / camera.aspect, 1, 1.6);
+    lookAt.set(camera.aspect > 1.5 ? 1.05 : 1.0, 0.95, camera.aspect > 1.5 ? -0.35 : -0.4);
     camera.updateProjectionMatrix();
   };
 
-  // with reduced motion the cell keeps working, but the camera holds still
-  const placeCamera = (t) => {
-    pointer.x += (pointer.tx - pointer.x) * 0.05;
-    pointer.y += (pointer.ty - pointer.y) * 0.05;
-    const drift = reduceMotion ? 0 : Math.sin(t * 0.06) * 0.07;
-    const az = view.az + drift + pointer.x * 0.08;
-    const el = view.el + pointer.y * 0.04;
+  // the camera holds still: the cell's own work is the motion
+  const placeCamera = () => {
     camera.position.set(
-      lookAt.x + view.radius * Math.sin(az) * Math.cos(el),
-      lookAt.y + view.radius * Math.sin(el),
-      lookAt.z + view.radius * Math.cos(az) * Math.cos(el),
+      lookAt.x + view.radius * Math.sin(view.az) * Math.cos(view.el),
+      lookAt.y + view.radius * Math.sin(view.el),
+      lookAt.z + view.radius * Math.cos(view.az) * Math.cos(view.el),
     );
     camera.lookAt(lookAt);
   };
-
-  hero.addEventListener("pointermove", (e) => {
-    if (e.pointerType !== "mouse" || reduceMotion) return;
-    const r = hero.getBoundingClientRect();
-    pointer.tx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-    pointer.ty = ((e.clientY - r.top) / r.height - 0.5) * 2;
-  });
-  hero.addEventListener("pointerleave", () => { pointer.tx = 0; pointer.ty = 0; });
 
   /* ---------- the cell's control logic ---------- */
   const HOME = new THREE.Vector3(0.95, 1.6, 1.0);
@@ -887,15 +852,11 @@
   const live = {};
   document.querySelectorAll("[data-live]").forEach((el) => { live[el.dataset.live] = el; });
   const setLive = (k, v) => { if (live[k] && live[k].textContent !== v) live[k].textContent = v; };
-  const copy = hero.querySelector(".hero-copy");
 
   const updateCallouts = () => {
     if (!callouts.length) return;
     const cw = canvas.clientWidth, ch = canvas.clientHeight;
-    const heroRect = hero.getBoundingClientRect();
-    const cRect = canvas.getBoundingClientRect();
-    const ox = cRect.left - heroRect.left, oy = cRect.top - heroRect.top;
-    const copyRight = !small.matches && copy ? copy.getBoundingClientRect().right - heroRect.left + 24 : -Infinity;
+    const ox = 0, oy = 0;
     const shown = [];
     for (const el of callouts) {
       if (getComputedStyle(el).display === "none") continue;
@@ -907,8 +868,8 @@
       const lw = label.offsetWidth || 200, lh = label.offsetHeight || 44;
       const flip = x + lw > ox + cw - 16; // too close to the right edge: hang the label to the left
       const left = flip ? x - lw : x;
-      const inView = ndc.z < 1 && left > ox + 8 && left + lw < ox + cw - 8 && y > oy + 96 && y < oy + ch - 40;
-      const on = inView && left > copyRight;
+      const inView = ndc.z < 1 && left > ox + 8 && left + lw < ox + cw - 8 && y > oy + 72 && y < oy + ch - 24;
+      const on = inView;
       el.classList.toggle("is-on", on);
       el.classList.toggle("is-flip", flip);
       el.style.transform = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`;
@@ -927,6 +888,7 @@
         if (overlapX && overlapY) a.stem = Math.min(a.y - (bTop - 8) - 4, 200);
       }
       a.el.style.setProperty("--stem", `${Math.max(44, a.stem).toFixed(0)}px`);
+      if (a.y - Math.max(44, a.stem) - 4 - a.lh < 8) a.el.classList.remove("is-on"); // would leave the window
     }
   };
 
@@ -944,21 +906,6 @@
   };
 
   /* ---------- frame ---------- */
-  const updateData = (t) => {
-    edgeTop.getWorldPosition(edgeWorld);
-    for (let i = 0; i < DATA_N; i++) {
-      const k = (dataSeed[i] + t * 0.12) % 1;
-      const sway = Math.sin(i * 12.9898) * 0.05;
-      dataPos[i * 3] = edgeWorld.x + sway;
-      dataPos[i * 3 + 1] = edgeWorld.y + k * 2.4;
-      dataPos[i * 3 + 2] = edgeWorld.z + Math.cos(i * 4.1) * 0.05;
-      const f = 1 - k;
-      dataCol[i * 3] = orange.r * f; dataCol[i * 3 + 1] = orange.g * f; dataCol[i * 3 + 2] = orange.b * f;
-    }
-    dataGeo.attributes.position.needsUpdate = true;
-    dataGeo.attributes.color.needsUpdate = true;
-  };
-
   const simulate = (dt) => {
     simTime += dt;
     updateBelt(dt);
@@ -985,11 +932,9 @@
   const tick = () => {
     timer.update();
     const dt = Math.min(timer.getDelta(), 1 / 20);
-    const t = timer.getElapsed();
     simulate(dt);
     placeRollers();
-    updateData(t);
-    placeCamera(t);
+    placeCamera();
     hmiClock += dt;
     if (hmiClock > 0.5) { hmiClock = 0; tt.hist.push(tt.v); tt.hist.shift(); drawHmi(); }
     renderer.render(scene, camera);
@@ -1000,7 +945,7 @@
 
   /* ---------- start ---------- */
   const renderStill = () => {
-    placeCamera(timer.getElapsed());
+    placeCamera();
     renderer.render(scene, camera);
     updateCallouts();
     updateTelemetry();
@@ -1016,7 +961,7 @@
   solveIK(cur, curYaw);
   drawHmi();
 
-  placeCamera(0);
+  placeCamera();
   try { await renderer.compileAsync(scene, camera); } catch (_) { /* compile on first render instead */ }
   renderer.render(scene, camera);
   canvas.classList.add("is-ready");
@@ -1028,7 +973,7 @@
     running = on;
     renderer.setAnimationLoop(on ? frame : null);
   };
-  new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); }, { threshold: 0.02 }).observe(hero);
+  new IntersectionObserver(([entry]) => { inView = entry.isIntersecting; sync(); }, { threshold: 0.02 }).observe(document.getElementById("twin") || hero);
 
   const pauseBtn = document.getElementById("cellPause");
   if (pauseBtn) {
