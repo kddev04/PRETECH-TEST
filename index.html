@@ -1,0 +1,769 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pretech Automation | Engineered from concept to commissioning</title>
+  <meta name="description" content="Since 1996, Pretech Automation in Pune has engineered pilot plants, process automation, control panels and Industry 4.0 systems for India's chemical and pharmaceutical manufacturers. 450+ projects.">
+  <meta name="theme-color" content="#0b0d11">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/img/mark-32.png">
+  <link rel="icon" type="image/png" sizes="64x64" href="assets/img/mark-64.png">
+  <link rel="apple-touch-icon" href="assets/img/mark-64.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <!-- three.js r186, loaded as ES modules through the import map -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.186.1/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.186.1/examples/jsm/"
+    }
+  }
+  </script>
+</head>
+<body>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<!-- ============ Header ============ -->
+<header class="header" id="top">
+  <div class="wrap header-row">
+    <a class="brand" href="#top" aria-label="Pretech Automation, home">
+      <img src="assets/img/mark.png" width="32" height="32" alt="">
+      <span class="brand-name">Pretech<span>Automation</span></span>
+    </a>
+
+    <nav class="nav" id="nav" aria-label="Main">
+      <a href="#process-systems">Process systems</a>
+      <a href="#automation">Automation</a>
+      <a href="#panels">Panels</a>
+      <a href="#iiot">IIoT</a>
+      <a href="#execution">How we execute</a>
+      <a href="#clients">Clients</a>
+      <a class="btn btn-primary btn-sm nav-cta" href="#contact">Discuss a project</a>
+    </nav>
+
+    <button class="menu-btn" id="menuBtn" aria-expanded="false" aria-controls="nav" aria-label="Open menu">
+      <svg class="i i-menu" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+      <svg class="i i-close" viewBox="0 0 24 24" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+</header>
+
+<main id="main">
+
+<!-- ============ Hero: the plant at dusk, the live cell rising from below ============ -->
+<section class="hero" id="hero" aria-labelledby="hero-title">
+  <div class="hero-stage">
+    <figure class="scene">
+      <img class="scene-img" src="assets/img/plant-dusk.jpg" width="1332" height="904" fetchpriority="high"
+           alt="A process plant at dusk: distillation columns, structural steel and pipe racks lit against a violet sky">
+      <ul class="pins" aria-label="What Pretech engineers in a plant like this">
+        <li class="pin pin-l" style="--x:58.5%; --y:21%; --stem:64px">
+          <span class="tag tag-xs"><span>PS</span><span>1</span></span><span class="pin-text"><b>Columns, vessels, skids</b>Process systems</span>
+        </li>
+        <li class="pin" style="--x:74%; --y:27%; --stem:88px">
+          <span class="tag tag-xs"><span>IT</span><span>4</span></span><span class="pin-text"><b>Plant data to ERP</b>Industry 4.0</span>
+        </li>
+        <li class="pin pin-l" style="--x:47%; --y:60%; --stem:96px">
+          <span class="tag tag-xs"><span>AU</span><span>2</span></span><span class="pin-text"><b>Instruments and valves</b>Automation</span>
+        </li>
+        <li class="pin pin-l" style="--x:93%; --y:83%; --stem:128px">
+          <span class="tag tag-xs"><span>CP</span><span>3</span></span><span class="pin-text"><b>MCC and PLC panels</b>Control panels</span>
+        </li>
+      </ul>
+      <figcaption>Illustrative plant view</figcaption>
+    </figure>
+
+    <div class="wrap hero-inner">
+      <div class="hero-copy">
+        <p class="meta">Pune, India <span aria-hidden="true">·</span> Engineering since 1996</p>
+        <h1 id="hero-title">Engineered from concept to commissioning</h1>
+        <p class="lead">Pilot plants, process automation, control panels and Industry 4.0 systems for India's chemical and pharmaceutical manufacturers. Designed, built, tested and started up by one team.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="#contact">Discuss a project
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+          <a class="btn btn-ghost" href="#execution">How we execute</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wrap">
+  <div class="twin" id="twin">
+    <div class="twin-bar">
+      <span class="t-live" aria-hidden="true"><i></i>Live cell, simulated</span>
+      <span class="twin-title">ROB-01 palletising · CV-101 conveyor · AGV-02</span>
+      <button class="t-pause" id="cellPause" type="button" aria-pressed="false" aria-label="Pause the 3D cell animation" hidden>Pause</button>
+    </div>
+    <div class="twin-view">
+  <canvas class="hero-canvas" id="cell" aria-hidden="true"></canvas>
+  <div class="callouts" id="callouts" aria-hidden="true">
+    <div class="callout" data-anchor="rob">
+      <span class="c-dot"></span><span class="c-stem"></span>
+      <div class="c-label"><span class="tag tag-xs"><span>AU</span><span>2</span></span><div><b>ROB-01 palletising</b><span data-live="rob">Pallet 0 / 8</span></div></div>
+    </div>
+    <div class="callout" data-anchor="reactor">
+      <span class="c-dot"></span><span class="c-stem"></span>
+      <div class="c-label"><span class="tag tag-xs"><span>PS</span><span>1</span></span><div><b>R-101 reactor skid</b><span data-live="reactor">TT-101 78.4 °C</span></div></div>
+    </div>
+    <div class="callout" data-anchor="panel">
+      <span class="c-dot"></span><span class="c-stem"></span>
+      <div class="c-label"><span class="tag tag-xs"><span>CP</span><span>3</span></span><div><b>PLC-01 control panel</b><span data-live="panel">Run · 0 faults</span></div></div>
+    </div>
+    <div class="callout" data-anchor="edge">
+      <span class="c-dot"></span><span class="c-stem"></span>
+      <div class="c-label"><span class="tag tag-xs"><span>IT</span><span>4</span></span><div><b>Edge gateway</b><span data-live="edge">OEE 86.2%</span></div></div>
+    </div>
+  </div>
+    </div>
+    <div class="telemetry" aria-hidden="true">
+      <span>ROB-01 <b data-live="state">Home</b></span>
+      <span>Cycle <b data-live="cycle">–</b></span>
+      <span>J1 <b data-live="j1">0.0°</b></span>
+      <span>CV-101 <b data-live="cv">0.40 m/s</b></span>
+      <span>TT-101 <b data-live="tt">78.4 °C</b></span>
+    </div>
+  </div>
+  </div>
+</section>
+
+<!-- ============ Proof ============ -->
+<section class="proof" aria-label="Pretech in numbers">
+  <div class="wrap">
+    <dl class="proof-row">
+      <div><dt>Projects completed</dt><dd>450+</dd></div>
+      <div><dt>Engineering since</dt><dd>1996</dd></div>
+      <div><dt>Industries served</dt><dd>18</dd></div>
+      <div><dt>Unit operations built for</dt><dd>14</dd></div>
+      <div><dt>Export countries</dt><dd>7</dd></div>
+    </dl>
+  </div>
+</section>
+
+<!-- ============ About ============ -->
+<section class="section about" id="about">
+  <div class="wrap">
+    <div class="about-grid">
+      <div>
+        <h2>Thirty years of moving Indian plants from manual to measured</h2>
+      </div>
+      <div class="about-text">
+        <p>India's chemical and pharmaceutical plants are changing how they run: from manual batches to automated, validated and connected operation. Pretech has engineered that shift since 1996, one plant at a time.</p>
+        <p>What began as a partnership firm in Pune is now a private limited company with three business verticals: process systems (EPC), process automation (projects) and control panels (manufacturing), plus an Industry 4.0 practice. We are an authorised system integrator for Schneider Electric and also supply Emerson automation systems.</p>
+      </div>
+    </div>
+
+    <div class="about-cols">
+      <div class="col">
+        <h3>Industries</h3>
+        <ul class="plain">
+          <li>Pharmaceutical and healthcare</li>
+          <li>Fragrance and flavours</li>
+          <li>Oil and gas, petrochemicals</li>
+          <li>Chemicals, fine chemicals, agrochemicals</li>
+          <li>Paint, pigment and dyes</li>
+          <li>Dairy, brewery and distillery</li>
+          <li>Biotechnology</li>
+          <li>Water and waste treatment</li>
+          <li>Power and material handling</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Unit operations</h3>
+        <ul class="ops">
+          <li>Blending</li><li>Hydrogenation</li><li>Nitration</li><li>Ethoxylation</li>
+          <li>Chlorination</li><li>Bromination</li><li>Evaporation</li><li>Distillation</li>
+          <li>Crystallization</li><li>Centrifuging</li><li>Drying</li><li>Bulk material handling</li>
+          <li>Boilers</li><li>Furnaces</li>
+        </ul>
+      </div>
+      <div class="col">
+        <h3>Consultants we have worked with</h3>
+        <p class="muted-list">UHDE, TCE, MECON, EIL, TÜV, DCPL, Essar Engineering, BHEL, Sulzer, Spectrum, Zeppelin, Quanta, Chemionix, Synergy</p>
+        <h3 class="h3-gap">Exported to</h3>
+        <p class="muted-list">Nepal, Malaysia, Indonesia, UAE, Saudi Arabia, Poland, Germany</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Our business: ISA-95 stack ============ -->
+<section class="section business" id="business">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Four disciplines, one chain from the vessel to the dashboard</h2>
+      <p class="section-lead">We build every layer of the automation stack ourselves, so the skid, the panel, the control system and the data platform are engineered to fit one another.</p>
+    </div>
+
+    <div class="business-grid">
+      <div class="stack-wrap" aria-hidden="true">
+        <div class="stack-scene">
+          <div class="stack" id="stack">
+            <div class="plate" data-layer="ps" style="--i:0">
+              <span class="plate-code">PS 1</span>
+              <span class="wire w1"><i></i></span><span class="wire w2"><i></i></span>
+            </div>
+            <div class="plate" data-layer="cp" style="--i:1">
+              <span class="plate-code">CP 3</span>
+              <span class="wire w1"><i></i></span><span class="wire w2"><i></i></span>
+            </div>
+            <div class="plate" data-layer="au" style="--i:2">
+              <span class="plate-code">AU 2</span>
+              <span class="wire w1"><i></i></span><span class="wire w2"><i></i></span>
+            </div>
+            <div class="plate" data-layer="it" style="--i:3">
+              <span class="plate-code">IT 4</span>
+            </div>
+          </div>
+          <ol class="stack-labels">
+            <li data-layer="it" style="--i:3"><span><b>Level 3–4</b>MES, ERP and analytics</span><i></i></li>
+            <li data-layer="au" style="--i:2"><span><b>Level 2</b>SCADA, DCS and HMI</span><i></i></li>
+            <li data-layer="cp" style="--i:1"><span><b>Level 1</b>Control panels, PLC and MCC</span><i></i></li>
+            <li data-layer="ps" style="--i:0"><span><b>Level 0</b>Process equipment and instruments</span><i></i></li>
+          </ol>
+        </div>
+        <p class="stack-caption">Mapped to the ISA-95 automation levels</p>
+      </div>
+
+      <ul class="disciplines">
+        <li>
+          <a class="disc" href="#process-systems" data-layer="ps">
+            <span class="tag"><span>PS</span><span>1</span></span>
+            <span class="disc-body">
+              <span class="disc-title">Process systems</span>
+              <span class="disc-text">Pilot plants, bulk material weighing and batching, and special-purpose skids, delivered as EPC</span>
+            </span>
+            <svg class="i disc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="disc" href="#automation" data-layer="au">
+            <span class="tag"><span>AU</span><span>2</span></span>
+            <span class="disc-body">
+              <span class="disc-title">Automation</span>
+              <span class="disc-text">Turnkey instrumentation and DCS, SCADA and PLC systems for process plants, from concept to commissioning</span>
+            </span>
+            <svg class="i disc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="disc" href="#panels" data-layer="cp">
+            <span class="tag"><span>CP</span><span>3</span></span>
+            <span class="disc-body">
+              <span class="disc-title">Control panels</span>
+              <span class="disc-text">Automation, electrical and flameproof panels, designed, built and tested in our own shop</span>
+            </span>
+            <svg class="i disc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </li>
+        <li>
+          <a class="disc" href="#iiot" data-layer="it">
+            <span class="tag"><span>IT</span><span>4</span></span>
+            <span class="disc-body">
+              <span class="disc-title">Industry 4.0 and IIoT</span>
+              <span class="disc-text">Software modules that connect plant data to ERP and MES, with analytics and predictive alerts</span>
+            </span>
+            <svg class="i disc-arrow" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Execution ============ -->
+<section class="section execution" id="execution">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Seven stages, each closed by a documented gate</h2>
+      <p class="section-lead">Engineering, in our terms, is the distance between a customer's basic process concept and a plant that runs, validated. We cover all of it, and every stage ends with something you can sign.</p>
+    </div>
+
+    <ol class="gates">
+      <li class="gate-head" aria-hidden="true">
+        <span></span><span>Stage</span><span>What we do</span><span>You receive</span><span>Gate</span>
+      </li>
+      <li>
+        <span class="g-n">01</span>
+        <h3>Concept and basic engineering</h3>
+        <p>Study the process concept, unit operations, utilities and control philosophy</p>
+        <p class="g-doc">P&amp;ID with instrument symbols and tag numbers</p>
+        <p class="g-gate">Design basis agreed</p>
+      </li>
+      <li>
+        <span class="g-n">02</span>
+        <h3>Detailed engineering</h3>
+        <p>Select instruments for the process conditions and set the control system architecture</p>
+        <p class="g-doc">Specifications, material requisitions, hook-ups, bills of material, cable specifications</p>
+        <p class="g-gate">Drawings approved</p>
+      </li>
+      <li>
+        <span class="g-n">03</span>
+        <h3>Procurement</h3>
+        <p>Evaluate and compare vendor offers, review vendor designs, inspect at supplier works before dispatch</p>
+        <p class="g-doc">Technical bid evaluation, inspection records</p>
+        <p class="g-gate">Material inspected</p>
+      </li>
+      <li>
+        <span class="g-n">04</span>
+        <h3>Manufacturing</h3>
+        <p>Build and wire panels in our shop, fabricate skids with their structure, piping and instrumentation</p>
+        <p class="g-doc">Panel and skid documentation</p>
+        <p class="g-gate">Ready for test</p>
+      </li>
+      <li class="g-key">
+        <span class="g-n">05</span>
+        <h3>Factory acceptance test</h3>
+        <p>Test the system with you in our facility, before it leaves for site</p>
+        <p class="g-doc">FAT protocol and report</p>
+        <p class="g-gate">FAT signed</p>
+      </li>
+      <li>
+        <span class="g-n">06</span>
+        <h3>Installation and commissioning</h3>
+        <p>Depute engineers, supervisors and technicians for installation, calibration, commissioning and production trials</p>
+        <p class="g-doc">Calibration and commissioning records</p>
+        <p class="g-gate">Production trial run</p>
+      </li>
+      <li class="g-key">
+        <span class="g-n">07</span>
+        <h3>Validation and handover</h3>
+        <p>Site acceptance test, operator training and validation for regulated plants</p>
+        <p class="g-doc">SAT report, DQ, IQ, OQ and PQ to US FDA 21 CFR Part 11 and GAMP</p>
+        <p class="g-gate">SAT signed</p>
+      </li>
+    </ol>
+
+    <div class="evidence">
+      <figure class="ev-main">
+        <img src="assets/img/shop-inspection.jpg" width="800" height="600" loading="lazy" alt="Engineers and visitors inspecting a control panel on the shop floor">
+        <figcaption><span class="g-n">05</span>Panel inspection on our shop floor</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/img/dispatch.jpg" width="800" height="600" loading="lazy" alt="Panels being packed into a wooden crate for dispatch">
+        <figcaption><span class="g-n">05 → 06</span>Crated for dispatch</figcaption>
+      </figure>
+      <figure>
+        <img src="assets/img/site-flameproof.jpg" width="800" height="319" loading="lazy" alt="Flameproof junction boxes and blue cable trays installed around a process scrubber tank">
+        <figcaption><span class="g-n">06</span>Flameproof wiring on site, at a process scrubber tank</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Process systems ============ -->
+<section class="section" id="process-systems">
+  <div class="wrap">
+    <div class="section-head with-tag">
+      <span class="tag tag-lg"><span>PS</span><span>1</span></span>
+      <div>
+        <h2>Process systems</h2>
+        <p class="section-lead">Engineering, procurement and construction (EPC) of turnkey pilot plants, bulk material handling, weighing and batching systems and skid-mounted assemblies. Process equipment, mechanical structure, piping, electrical and instrumentation come under one contract.</p>
+      </div>
+    </div>
+
+    <article class="feature">
+      <div class="feature-media">
+        <img src="assets/img/pilot-skid.jpg" width="800" height="600" loading="lazy" alt="Stainless steel process vessels on a skid frame with manifold piping, under fabrication">
+      </div>
+      <div class="feature-body">
+        <h3>Pilot plants</h3>
+        <p>Pilot-scale process plants engineered, manufactured, tested and supplied as an EPC contract, built from the customer's basic process concept. A pilot plant is where a lab process proves it can scale, so the vessels, structure, piping, electricals and instrumentation arrive as one engineered package.</p>
+        <p class="sublabel">Reactions and operations we have built for</p>
+        <ul class="chips">
+          <li>Hydrogenation</li><li>Nitration</li><li>Ethoxylation</li><li>Chlorination</li><li>Bromination</li><li>Distillation</li><li>Evaporation</li><li>Crystallization</li><li>Drying</li>
+        </ul>
+      </div>
+    </article>
+
+    <div class="pair">
+      <article class="card">
+        <div class="card-media">
+          <img src="assets/img/weighing-batching-image.jpg" width="330" height="329" loading="lazy" alt="A bulk bag unloading and batching station with screw conveyors feeding a hopper">
+        </div>
+        <div class="card-body">
+          <h3>Weighing and batching</h3>
+          <p>Bulk material weighing and batching systems: bag and big-bag unloading, conveying, weigh hoppers and dosing to recipe, with the handling equipment, structure, piping, electricals and instrumentation included.</p>
+        </div>
+      </article>
+      <article class="card">
+        <div class="card-media">
+          <img src="assets/img/skid-equipment-image.jpg" width="330" height="329" loading="lazy" alt="A mobile metering trolley with a flow meter, pump and local control box">
+        </div>
+        <div class="card-body">
+          <h3>Skids and special equipment</h3>
+          <p>Ready-to-use special-purpose equipment for process and utility duty, designed, manufactured and tested in-house.</p>
+          <ul class="plain plain-tight">
+            <li>Metering mobile trolleys</li>
+            <li>Single utility systems</li>
+            <li>Hot water systems</li>
+          </ul>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Automation ============ -->
+<section class="section automation" id="automation">
+  <div class="wrap">
+    <div class="section-head with-tag">
+      <span class="tag tag-lg"><span>AU</span><span>2</span></span>
+      <div>
+        <h2>Automation</h2>
+        <p class="section-lead">Industrial process automation on a turnkey basis, from concept to commissioning: process instrumentation, the automation control system and the electrical system.</p>
+      </div>
+    </div>
+
+    <div class="tabs" id="autoTabs">
+      <div class="tablist" role="tablist" aria-label="Automation services">
+        <button role="tab" id="t-ci" aria-controls="p-ci" aria-selected="true">Control and instrumentation projects</button>
+        <button role="tab" id="t-cs" aria-controls="p-cs" aria-selected="false" tabindex="-1">Control systems</button>
+        <button role="tab" id="t-ep" aria-controls="p-ep" aria-selected="false" tabindex="-1">Engineering and project management</button>
+      </div>
+
+      <div class="tabpanel" role="tabpanel" id="p-ci" aria-labelledby="t-ci">
+        <img src="assets/img/control-and-instrumentation.jpg" width="329" height="329" loading="lazy" alt="Field instrumentation and control valves on reactor piping">
+        <div>
+          <h3>Turnkey projects, control and instrumentation</h3>
+          <p>Field instruments to control room, under one scope.</p>
+          <ul class="scope">
+            <li>Design, manufacture, supply, erection and commissioning of process instrumentation and PLC, SCADA or DCS</li>
+            <li>Detailed engineering, drawings and documentation to standard engineering practice</li>
+            <li>Design, sizing, selection and supply of sensors, transmitters and actuated valves</li>
+            <li>PLC, SCADA or DCS with control and marshalling cabinets, computers, consoles and networking</li>
+            <li>Cables, cable trays and installation hardware</li>
+            <li>Engineers, supervisors and technicians deputed for site installation</li>
+            <li>Factory acceptance test, calibration, commissioning, production trials, training and site acceptance test</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tabpanel" role="tabpanel" id="p-cs" aria-labelledby="t-cs" hidden>
+        <img src="assets/img/control-systems.jpg" width="329" height="329" loading="lazy" alt="A SCADA mimic screen showing reactors, valves and live process values">
+        <div>
+          <h3>Turnkey projects, control systems</h3>
+          <p>The same scope as a control and instrumentation project, without the field instrumentation and site installation.</p>
+          <ul class="scope">
+            <li>Authorised system integrator of Schneider Electric for their PLC, HMI, SCADA and DCS range</li>
+            <li>Architectures from a single non-redundant controller to hot-standby, multi-controller distributed configurations on the Schneider EcoStruxure platform</li>
+            <li>Control system design based on the team's domain experience in chemicals and life sciences</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tabpanel" role="tabpanel" id="p-ep" aria-labelledby="t-ep" hidden>
+        <img src="assets/img/engg-project-mgmt-services.jpg" width="329" height="329" loading="lazy" alt="A piping and instrumentation diagram">
+        <div>
+          <h3>Engineering and project management services</h3>
+          <p>Our engineering team working as your automation consultant, from concept to commissioning.</p>
+          <ul class="scope">
+            <li>P&amp;ID preparation with instrument symbols and tag numbers</li>
+            <li>Field instrument design and selection for the process conditions</li>
+            <li>Material requisitions with detailed specifications for instruments, the control system and UPS</li>
+            <li>Control system concept and basic system architecture</li>
+            <li>Typical hook-up schematics, bills of material, cable and cable tray specifications</li>
+            <li>Instrument air requirement calculation</li>
+            <li>Technical bid evaluation and review of vendor designs and drawings</li>
+            <li>Inspection at supplier works before dispatch, then supervision of installation, pre-commissioning and commissioning</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="validation">
+      <p>Validation documentation for regulated plants</p>
+      <ul>
+        <li>US FDA 21 CFR Part 11</li><li>GAMP</li><li>DQ</li><li>IQ</li><li>OQ</li><li>PQ</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Panels ============ -->
+<section class="section" id="panels">
+  <div class="wrap">
+    <div class="section-head with-tag">
+      <span class="tag tag-lg"><span>CP</span><span>3</span></span>
+      <div>
+        <h2>Control panels</h2>
+        <p class="section-lead">A dedicated set-up for the design, manufacture and testing of automation and LV electrical panels, including panels for imported machines and flameproof panels for hazardous areas.</p>
+      </div>
+    </div>
+
+    <div class="panel-types">
+      <article class="ptype">
+        <img class="ptype-img" src="assets/img/panel-automation.jpg" width="800" height="516" loading="lazy" alt="Automation panels with doors open, showing drives, PLC modules and terminal wiring">
+        <p class="ptype-n">01</p>
+        <h3>Automation panels</h3>
+        <p class="ptype-what">Hold the controllers and I/O, and land every field signal on a terminal</p>
+        <ul class="plain">
+          <li>DCS panels</li>
+          <li>Marshalling panels</li>
+          <li>PLC cum marshalling panels</li>
+          <li>PLC cum MCC panels</li>
+        </ul>
+      </article>
+      <article class="ptype">
+        <img class="ptype-img" src="assets/img/panel-mcc.jpg" width="800" height="573" loading="lazy" alt="A line-up of motor control centre panels with a touchscreen HMI and stack light">
+        <p class="ptype-n">02</p>
+        <h3>Electrical panels</h3>
+        <p class="ptype-what">Distribute power, then start, protect and control every motor</p>
+        <ul class="plain">
+          <li>MCC panels</li>
+          <li>iMCC (smart MCC) panels</li>
+          <li>Soft starter panels</li>
+          <li>VFD drive panels</li>
+          <li>Power distribution boards</li>
+        </ul>
+      </article>
+      <article class="ptype">
+        <img class="ptype-img" src="assets/img/panel-flameproof.jpg" width="636" height="600" loading="lazy" alt="Flameproof enclosures and indicators mounted on a frame, wired through blue cable conduit">
+        <p class="ptype-n">03</p>
+        <h3>Flameproof panels</h3>
+        <p class="ptype-what">For areas where flammable vapour can be present, so a fault inside the enclosure cannot ignite the atmosphere outside</p>
+        <ul class="plain">
+          <li>Flameproof automation panels</li>
+          <li>Flameproof PLC panels</li>
+          <li>Flameproof electrical panels</li>
+          <li>Flameproof drive panels</li>
+          <li>Local control panels for critical equipment</li>
+        </ul>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ IIoT ============ -->
+<section class="section iiot" id="iiot">
+  <div class="wrap">
+    <div class="section-head with-tag">
+      <span class="tag tag-lg"><span>IT</span><span>4</span></span>
+      <div>
+        <h2>Plant data the whole business can use</h2>
+        <p class="section-lead">Years in chemicals and life sciences showed us where the gap is: between the ERP, the MES and the plant floor. Our Industry 4.0 solutions close it with plug-and-play, customisable software modules built on data analytics, AI and ML, hosted in the cloud or on site, with your data secured.</p>
+      </div>
+    </div>
+
+    <div class="iiot-grid">
+      <ul class="caps">
+        <li><h3>Visualise</h3><p>Live business processes and key parameters on a PC, laptop or phone</p></li>
+        <li><h3>Integrate</h3><p>The whole business, from sales order to production planning to raw material and finished goods inventory</p></li>
+        <li><h3>Optimise</h3><p>Asset utilisation through uptime monitoring, standby alerts, occupancy, performance analysis and maintenance alerts</p></li>
+        <li><h3>Alert</h3><p>Live and predictive alerts on costs, asset availability, productivity and inventory</p></li>
+        <li><h3>Adapt</h3><p>Realign processes quickly when the market moves</p></li>
+      </ul>
+
+      <figure class="dash-fig">
+        <div class="dash" role="img" aria-label="Sample plant overview dashboard showing OEE, uptime, reactor utilisation and alerts">
+          <div class="dash-top">
+            <div>
+              <p class="dash-title">Plant overview</p>
+              <p class="dash-meta">Block A · Shift B</p>
+            </div>
+            <span class="live"><i></i>Live</span>
+          </div>
+
+          <div class="dash-stats">
+            <div><p>OEE</p><b>78.6%</b><span class="up">+3.1 pts vs last week</span></div>
+            <div><p>Uptime today</p><b>21h 42m</b><span>of 24h</span></div>
+            <div><p>Batches</p><b>6</b><span>of 7 planned</span></div>
+            <div><p>Open alerts</p><b>2</b><span>1 predictive</span></div>
+          </div>
+
+          <div class="dash-main">
+            <div class="dash-chart">
+              <div class="dash-chart-head">
+                <p>Reactor utilisation, last 14 days</p>
+                <p class="legend"><i class="lg-a"></i>Actual <i class="lg-t"></i>Target 80%</p>
+              </div>
+              <svg id="utilChart" viewBox="0 0 400 176"></svg>
+            </div>
+            <div class="dash-assets">
+              <p class="dash-sub">Assets now</p>
+              <ul>
+                <li><span>R-101</span><span class="bar"><i style="width:86%"></i></span><b>86%</b></li>
+                <li><span>R-102</span><span class="bar"><i style="width:74%"></i></span><b>74%</b></li>
+                <li class="warn"><span>R-103</span><span class="bar"><i style="width:41%"></i></span><b>41%</b></li>
+                <li><span>D-201</span><span class="bar"><i style="width:68%"></i></span><b>68%</b></li>
+                <li><span>C-301</span><span class="bar"><i style="width:57%"></i></span><b>57%</b></li>
+              </ul>
+            </div>
+          </div>
+
+          <ul class="dash-alerts">
+            <li><span class="sev sev-w"></span>R-103 on standby for 48 min<time>09:42</time></li>
+            <li><span class="sev sev-p"></span>Chiller CH-02 at 92% of service interval<time>Predictive</time></li>
+          </ul>
+        </div>
+        <figcaption>Sample dashboard with illustrative data</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ Clients ============ -->
+<section class="section clients" id="clients">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>Trusted by manufacturers, equipment makers and national labs</h2>
+    </div>
+
+    <div class="filters" role="group" aria-label="Filter clients by industry">
+      <button class="filter" aria-pressed="true" data-filter="all">All <span>24</span></button>
+      <button class="filter" aria-pressed="false" data-filter="pharma">Pharma and aroma <span>8</span></button>
+      <button class="filter" aria-pressed="false" data-filter="chem">Chemicals <span>6</span></button>
+      <button class="filter" aria-pressed="false" data-filter="equip">Equipment <span>8</span></button>
+      <button class="filter" aria-pressed="false" data-filter="gov">Government <span>2</span></button>
+    </div>
+
+    <ul class="logos" id="logos">
+      <li data-cat="pharma"><img src="assets/clients/centaur.png" alt="Centaur" loading="lazy"></li>
+      <li data-cat="pharma"><img src="assets/clients/indoco.png" alt="Indoco Remedies" loading="lazy"></li>
+      <li data-cat="pharma"><img src="assets/clients/emcure.png" alt="Emcure" loading="lazy"></li>
+      <li data-cat="pharma"><img src="assets/clients/vital-laboratories.png" alt="Vital Laboratories" loading="lazy"></li>
+      <li data-cat="pharma"><img src="assets/clients/auro-laboratories.png" alt="Auro Laboratories" loading="lazy"></li>
+      <li data-cat="pharma"><img src="assets/clients/norex.png" alt="Norex" loading="lazy"></li>
+      <li data-cat="pharma"><img src="assets/clients/aquila.png" alt="Aquila" loading="lazy"></li>
+      <li data-cat="pharma"><img src="assets/clients/avesta-pharma-logo.png" alt="Avesta Pharma" loading="lazy"></li>
+      <li data-cat="chem"><img src="assets/clients/super-bond-group.png" alt="Super Bond Group" loading="lazy"></li>
+      <li data-cat="chem"><img src="assets/clients/sandhya-group.png" alt="Sandhya Group" loading="lazy"></li>
+      <li data-cat="chem"><img src="assets/clients/crystal.png" alt="Crystal Crop Protection" loading="lazy"></li>
+      <li data-cat="chem"><img src="assets/clients/navin-flourine.png" alt="Navin Fluorine International" loading="lazy"></li>
+      <li data-cat="chem"><img src="assets/clients/anupam-rasayan.png" alt="Anupam Rasayan" loading="lazy"></li>
+      <li data-cat="chem"><img src="assets/clients/hemani.png" alt="Hemani" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/gmm-pfaudler.png" alt="GMM Pfaudler" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/huber-logo.png" alt="Huber" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/borosil.png" alt="Borosil" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/elliott-group.png" alt="Elliott Group" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/sulzer.png" alt="Sulzer" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/atlas-copco.png" alt="Atlas Copco" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/hoerbiger.png" alt="Hoerbiger" loading="lazy"></li>
+      <li data-cat="equip"><img src="assets/clients/kopl.png" alt="KOPL" loading="lazy"></li>
+      <li data-cat="gov"><img src="assets/clients/barc.png" alt="Bhabha Atomic Research Centre (BARC)" loading="lazy"></li>
+      <li data-cat="gov"><img src="assets/clients/drdo.png" alt="Defence Research and Development Organisation (DRDO)" loading="lazy"></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ Contact ============ -->
+<section class="section contact" id="contact">
+  <div class="wrap contact-grid">
+    <div class="contact-info">
+      <h2>Tell us about your process</h2>
+      <p class="section-lead">A pilot plant, a panel, a control system upgrade or plant data you want on a dashboard. Send the basics and our engineers will get back to you.</p>
+
+      <ul class="channels">
+        <li>
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          <div><span>Phone</span><a href="tel:+919422310821">+91 94223 10821</a></div>
+        </li>
+        <li>
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg>
+          <div><span>WhatsApp</span><a href="https://wa.me/919422310821" target="_blank" rel="noopener">Chat with us</a></div>
+        </li>
+        <li>
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          <div><span>Email</span><a href="mailto:shriram.sampagaonkar@pretech.co.in">shriram.sampagaonkar@pretech.co.in</a></div>
+        </li>
+        <li>
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <div><span>Works</span>
+            <address>Plot 78 + 79, Tiny Industrial Estate, Kondhwa Bk., Pisoli Road, Pune 411048, Maharashtra, India</address>
+            <a class="small-link" href="https://www.google.com/maps/search/?api=1&amp;query=Tiny+Industrial+Estate+Kondhwa+Pisoli+Road+Pune+411048" target="_blank" rel="noopener">Open in Maps
+              <svg class="i i-sm" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M7 7h10v10"/></svg>
+            </a>
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <form class="form" id="contactForm" novalidate>
+      <div class="field">
+        <label for="f-name">Name</label>
+        <input id="f-name" name="name" type="text" autocomplete="name" required>
+        <p class="err" id="e-name"></p>
+      </div>
+      <div class="field">
+        <label for="f-company">Company <span class="opt">Optional</span></label>
+        <input id="f-company" name="company" type="text" autocomplete="organization">
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="f-email">Email</label>
+          <input id="f-email" name="email" type="email" autocomplete="email" required>
+          <p class="err" id="e-email"></p>
+        </div>
+        <div class="field">
+          <label for="f-mobile">Mobile</label>
+          <input id="f-mobile" name="mobile" type="tel" autocomplete="tel" inputmode="tel">
+          <p class="err" id="e-mobile"></p>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-msg">What do you need</label>
+        <textarea id="f-msg" name="message" rows="5" required placeholder="Process, capacity, location, timeline"></textarea>
+        <p class="err" id="e-msg"></p>
+      </div>
+      <div class="form-actions">
+        <button class="btn btn-primary" type="submit" data-via="email">Send by email</button>
+        <button class="btn btn-secondary" type="submit" data-via="whatsapp">Send on WhatsApp</button>
+      </div>
+      <p class="form-note" id="formNote" role="status"></p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<!-- ============ Footer ============ -->
+<footer class="footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <img src="assets/img/mark.png" width="40" height="40" alt="">
+      <p><b>Pretech Automation Pvt. Ltd.</b><br>Process systems, automation, control panels and Industry 4.0, since 1996</p>
+    </div>
+    <div>
+      <p class="footer-h">What we build</p>
+      <ul>
+        <li><a href="#process-systems">Process systems</a></li>
+        <li><a href="#automation">Automation</a></li>
+        <li><a href="#panels">Control panels</a></li>
+        <li><a href="#iiot">Industry 4.0 and IIoT</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-h">Company</p>
+      <ul>
+        <li><a href="#about">About</a></li>
+        <li><a href="#execution">How we execute</a></li>
+        <li><a href="#clients">Clients</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-h">Reach us</p>
+      <address>Plot 78 + 79, Tiny Industrial Estate,<br>Kondhwa Bk., Pisoli Road,<br>Pune 411048, Maharashtra, India</address>
+      <p><a href="tel:+919422310821">+91 94223 10821</a></p>
+    </div>
+  </div>
+  <div class="wrap footer-base">
+    <p>© <span id="year">2026</span> Pretech Automation Pvt. Ltd.</p>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
+
+<!-- WhatsApp -->
+<a class="wa-float" href="https://wa.me/919422310821?text=Hello%20Pretech%2C%20I%27d%20like%20to%20discuss%20a%20project." target="_blank" rel="noopener" aria-label="Chat with Pretech on WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+  <span>WhatsApp</span>
+</a>
+
+<script src="script.js"></script>
+</body>
+</html>
