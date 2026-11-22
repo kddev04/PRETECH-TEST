@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pretech Connect | Business Central and MySQL</title>
+  <link rel="icon" type="image/png" href="/static/mark-32.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+
+<header class="top">
+  <div class="top-row">
+    <div class="brand">
+      <img src="/static/mark.png" alt="">
+      <div><b>Pretech Connect</b><span>Business Central ⇄ MySQL</span></div>
+    </div>
+    <div class="conn">
+      <span class="pill" title="Business Central"><i class="dot" id="bcDot"></i>Business Central <b id="bcName">…</b></span>
+      <span class="pill" title="MySQL"><i class="dot" id="dbDot"></i><span id="dbKind">MySQL</span> <b id="dbName">…</b></span>
+    </div>
+    <div class="top-actions">
+      <label class="switch" title="Pull and push automatically">
+        <input type="checkbox" id="autoSync"> Auto sync <span class="mono" id="autoEvery">10 s</span>
+      </label>
+      <button class="btn btn-primary" id="syncBtn">Sync now</button>
+    </div>
+  </div>
+  <div class="banner mock-only" hidden>
+    <b>Demo mode.</b> Business Central is simulated on this machine with Pretech Automation's catalogue and
+    sample figures. The connector code is the same one that talks to a live tenant; only the address and
+    sign-in in <span class="mono">.env</span> change.
+  </div>
+  <div class="banner live-only" hidden>
+    <b>Live tenant.</b> Connected to Business Central environment <span class="mono" id="liveEnv"></span>.
+    Changes pushed from here are real.
+  </div>
+</header>
+
+<main class="page">
+  <section class="flow" id="cards" aria-label="Entities"></section>
+
+  <section class="main">
+    <div class="panel">
+      <div class="tabs" role="tablist" id="entityTabs"></div>
+      <div class="table-wrap" id="tableWrap"><div class="empty">Loading…</div></div>
+    </div>
+
+    <aside class="panel">
+      <div class="panel-head"><h2>Demonstration</h2><span class="muted mono" style="font-size:12px">run top to bottom</span></div>
+      <div class="steps">
+        <div class="step">
+          <h3><i>1</i>Pull everything from Business Central</h3>
+          <p>Reads every customer, vendor, item and sales order, page by page, into the MySQL mirror tables.</p>
+          <div class="row"><button class="btn btn-secondary" id="fullPull">Full pull now</button></div>
+        </div>
+
+        <div class="step mock-only" hidden>
+          <h3><i>2</i>A user edits a record in Business Central</h3>
+          <p>Simulates someone changing a value inside BC. Only that record is pulled on the next sync.</p>
+          <div class="row">
+            <select id="bcEntity"><option value="items">Item</option><option value="customers">Customer</option></select>
+            <select id="bcRecord"></select>
+          </div>
+          <div class="row">
+            <select id="bcField"></select>
+            <input type="text" id="bcValue" placeholder="New value">
+            <button class="btn btn-secondary" id="bcSave">Save in BC</button>
+          </div>
+        </div>
+
+        <div class="step">
+          <h3><i id="n3">3</i>Change a value from MySQL</h3>
+          <p>Your systems write to <span class="mono">bc_outbox</span>; the connector sends it to BC with an ETag check.</p>
+          <div class="row">
+            <select id="mxEntity"><option value="items">Item</option><option value="customers">Customer</option></select>
+            <select id="mxRecord"></select>
+          </div>
+          <div class="row">
+            <select id="mxField"></select>
+            <input type="text" id="mxValue" placeholder="New value">
+            <button class="btn btn-secondary" id="mxQueue">Queue</button>
+          </div>
+        </div>
+
+        <div class="step">
+          <h3><i id="n4">4</i>Create a customer from MySQL</h3>
+          <p>BC assigns the customer number; it comes back into MySQL with the new record.</p>
+          <div class="row">
+            <input type="text" id="ncName" placeholder="Company name">
+            <input type="text" id="ncCity" placeholder="City">
+          </div>
+          <div class="row">
+            <input type="text" id="ncState" placeholder="State code, e.g. MH">
+            <input type="number" id="ncCredit" placeholder="Credit limit (INR)">
+            <button class="btn btn-secondary" id="ncQueue">Queue</button>
+          </div>
+        </div>
+
+        <div class="step mock-only" hidden>
+          <h3><i>5</i>Both sides edit the same record</h3>
+          <p>BC changes the city while MySQL changes the credit limit. The connector detects the stale ETag (HTTP 412), re-reads and keeps both changes.</p>
+          <div class="row">
+            <select id="cfRecord"></select>
+            <button class="btn btn-secondary" id="cfRun">Set up conflict</button>
+          </div>
+        </div>
+
+        <div class="step mock-only" hidden>
+          <h3><i>6</i>Business Central is busy</h3>
+          <p>BC limits request rates. With throttling on, every third call gets HTTP 429 and the connector waits and retries.</p>
+          <div class="row">
+            <label class="switch" style="color:var(--ink-2)"><input type="checkbox" id="throttle"> Simulate throttling</label>
+          </div>
+        </div>
+
+        <div class="step mock-only" hidden>
+          <h3><i>↺</i>Start over</h3>
+          <p>Restores the sample company in BC and empties the MySQL tables.</p>
+          <div class="row"><button class="btn btn-danger" id="reset">Reset demo</button></div>
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <section class="panel lower">
+    <div class="tabs" role="tablist" id="lowerTabs">
+      <button role="tab" data-pane="paneLog" aria-selected="true">Activity <span id="logCount"></span></button>
+      <button role="tab" data-pane="paneOutbox" aria-selected="false">bc_outbox <span id="obCount"></span></button>
+      <button role="tab" data-pane="paneSql" aria-selected="false">SQL on MySQL</button>
+    </div>
+    <div id="paneLog"><ul class="log" id="log"></ul></div>
+    <div id="paneOutbox" hidden><div class="table-wrap" id="outboxWrap"></div></div>
+    <div id="paneSql" hidden>
+      <div class="sql-bar" id="sqlExamples"></div>
+      <div class="sql-area">
+        <textarea id="sql" spellcheck="false"></textarea>
+        <div class="row"><button class="btn btn-primary" id="sqlRun" style="flex:0 0 auto">Run read-only query</button><span class="muted" style="align-self:center;font-size:12px">SELECT, SHOW, DESCRIBE and EXPLAIN only</span></div>
+        <div class="sql-err" id="sqlErr"></div>
+        <div class="table-wrap" id="sqlOut"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="scrim" data-close></div>
+  <div class="sheet" role="dialog" aria-modal="true" aria-labelledby="drawerTitle">
+    <div class="panel-head"><h2 id="drawerTitle">Record</h2><button class="btn btn-ghost btn-sm" data-close>Close</button></div>
+    <div class="body" id="drawerBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
